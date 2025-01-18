@@ -1,0 +1,1 @@
+DROP DATABASE wild_around;

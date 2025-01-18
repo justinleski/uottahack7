@@ -1,0 +1,10 @@
+{
+  "get_password": "select password_hash from users_login where email_hash = ?",
+  "get_id": "select id from users_login where email_hash = ?",
+  "get_id_by_slug": "select id from users_main where slug = ?",
+  "get_slug": "select slug from users_main where id = ?",
+  "create_user_main": "insert into users_main (slug) values (?)",
+  "create_user_login": "insert into users_login (id, email_hash, password_hash) values (?, ?, ?)",
+  "update_personal": "INSERT INTO users_personal (id, name, fav_animal) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE name = VALUES(name), fav_animal = VALUES(fav_animal), updated_at = CURRENT_TIMESTAMP;",
+  "get_personal": "select name, fav_animal from users_personal where id = ?"
+}
