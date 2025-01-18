@@ -50,7 +50,7 @@
 ### 7. Seasonal and Thematic Campaigns
 - **Examples:**
   - Spring Migration Challenge: Spot as many migratory birds as possible.
-  - Endangered Species Week: Log sightings of at-risk animals.
+  - Endangered Species Week: Log sightings of at-risk animals
 
 ---
 
