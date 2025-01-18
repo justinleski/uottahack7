@@ -1,9 +1,12 @@
 import React from 'react';
 import "./Buttons.css"
-
+import {Link} from "react-router-dom";
 
 
 // Make a sticky navbar, route to different pages.
+
+
+
 
 
 function Buttons(props) {
@@ -14,9 +17,19 @@ function Buttons(props) {
             <div className="buttons-container">
 
                 <div className="icons-row">
-                    <i className="bi bi-house"></i>
-                    <i className="bi bi-camera"></i>
-                    <i className="bi bi-person-circle"></i>
+
+                    <Link to="/Map">
+                        <i className="bi bi-house"></i>
+
+                    </Link>
+                    <Link to="/camera">
+                        <i className="bi bi-camera"></i>
+                    </Link>
+
+                    <Link to="/Profile">
+                        <i className="bi bi-person-circle"></i>
+                    </Link>
+
                 </div>
 
 

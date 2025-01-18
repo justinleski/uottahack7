@@ -19,6 +19,7 @@ function Camera() {
     return (
         <>
             <div className="camera-container">
+
                 <Webcam
                     audio={false}
                     screenshotFormat="image/jpeg"
