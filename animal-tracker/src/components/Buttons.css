@@ -19,7 +19,7 @@
     box-sizing: border-box;
 
     position: fixed;
-    top: 0;
+    bottom: 0;
 }
 
 .icons-row{
