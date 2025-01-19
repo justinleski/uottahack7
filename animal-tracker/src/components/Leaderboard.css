@@ -21,6 +21,7 @@
   flex-grow: 1;
   height: 100vh; /* Full viewport height */
   box-sizing: border-box;
+  flex-grow: 1;
   overflow: hidden; /* Prevent overflow issues */
 }
 
