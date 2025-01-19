@@ -34,7 +34,6 @@ module.exports = (app) => {
     app.post("/uuid2password", express.json(), uuid2password);
     app.post("/finalise", express.json(), finalise);
     app.post("/logout", logout);
-    // app.get("/", (req, res) => res.sendFile(path.join(__dirname, '../../animal-tracker/dist', 'index.html')));
     // app.get("/assets", (req, res) => res.sendFile(path.join(__dirname, '../../animal-tracker/dist/assets', 'index.html')))
     app.use(express.static(path.join(__dirname, '../../animal-tracker/dist')));
 
