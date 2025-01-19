@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import Modal from "./Modal.jsx";
 import {
   MapContainer,
   TileLayer,
@@ -15,6 +16,7 @@ const Map = () => {
   // to position the map
   const position = [0, 0];
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [animalImage, setAnimalImage] = useState(null);
 
   // sample data
   const coordinates = [
@@ -26,7 +28,7 @@ const Map = () => {
   const createCustomDivIcon = (imgSrc) => L.divIcon({
       className: 'custom-marker',
       html: `<div style="
-      padding: 5px; 
+      padding: 1.5px; 
       width: 40px; 
       height: 60px; 
       border-radius: 0.5rem; 
@@ -37,38 +39,50 @@ const Map = () => {
       justify-content: center; 
       color: black;
       text-align: center;">
-        <img src="${imgSrc}" style="width: 100%; height: 100%; border-radius: 0.5rem; object-fit: cover;">
+        <img src="${imgSrc}" style="width: 100%; height: 35px; border-radius: 0.5rem; object-fit: cover;">
     </div>`,
       iconSize: [15, 15], // Width and height of the div
       iconAnchor: [10, 20] // Center the icon
     });
 
-    const handleMarkerClick = (data) => {
+    const handleMarkerClick = (imgSrc) => {
+      setAnimalImage(imgSrc);
       setIsModalOpen(true);
     };
   
     const closeModal = () => {
       setIsModalOpen(false);
+      setAnimalImage(null);
     };
 
     return (
-      <MapContainer center={position} zoom={1} scrollWheelZoom={true}>
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      {coordinates.map(({ lat, lng, imgSrc }, index) => (
-          <Marker
-            key={index}
-            position={[lat, lng]}
-            icon={createCustomDivIcon(imgSrc)}
-            eventHandlers={{
-              click: () => handleMarkerClick({ imgSrc }),
-            }}
+      <>
+        <MapContainer center={position} zoom={1} scrollWheelZoom={true}>
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-        ))}
-    </MapContainer>
-  );
+          {coordinates.map(({ lat, lng, imgSrc }, index) => (
+              <Marker
+                key={index}
+                position={[lat, lng]}
+                icon={createCustomDivIcon(imgSrc)}
+                eventHandlers={{
+                  click: () => handleMarkerClick({ imgSrc }),
+                }}
+              />
+            ))}
+        </MapContainer>
+
+        {animalImage && <Modal // ensures it runs only when jsonData is not null
+            plantData={animalImage}
+            isVisible={isModalOpen} 
+            onClose={closeModal} 
+            //onSubmit={handleSubmit} 
+            //onSearch={handleSearch}
+        />}
+      </>
+    );
   
 };
 
