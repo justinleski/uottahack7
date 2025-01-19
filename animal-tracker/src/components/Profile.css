@@ -1,36 +1,53 @@
-.profile-container{
+
+:root {
+    --primary-white: #FFFFFF;
+    --light-gray: #E7ECF0;
+    --primary-green: #6EA868;
+    --dark-green: #54974D;
+    --highlight-yellow: #FFCA28;
+}
+
+.profile-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: var(--light-gray);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.coin-counter{
+.coin-counter {
     display: flex;
     flex-direction: row;
     position: absolute;
     top: 2em;
     right: 2em;
-
+    background-color: var(--primary-green);
+    color: var(--primary-white);
+    padding: 10px;
+    border-radius: 5px;
 }
 
-.profile-top{
-    font-size: 4em;
+.profile-top {
+    font-size: 1.8em;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-
     margin: 20px;
-    /*padding-top: 0;*/
 }
 
-.username{
-    padding-left: 100px;
-    padding-bottom: 2px;
+.username {
+    margin-top: 10px;
+    color: var(--dark-green);
+    font-weight: bold;
 }
 
-.user-avatar{
-    width: 30%;
-    height: 30%;
+.user-avatar {
+    width: 120px;
+    height: 120px;
+    border: 3px solid var(--primary-green);
+    border-radius: 50%;
+    object-fit: cover;
 }

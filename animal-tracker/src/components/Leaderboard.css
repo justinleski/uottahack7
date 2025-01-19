@@ -1,11 +1,4 @@
-body{
-  margin: 0 !important;
-  padding: 0 !important;
-}
 
-*{
-  box-sizing: border-box;
-}
 :root {
   --primary-white: #FFFFFF;
   --light-gray: #E7ECF0;
