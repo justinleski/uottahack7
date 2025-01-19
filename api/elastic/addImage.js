@@ -9,6 +9,7 @@ module.exports = async function main(url, slug, location, animal) {
             }
         });
 
+        console.log(animal);
         await client.indices.refresh({ index: 'images_index' });
 
         return true;

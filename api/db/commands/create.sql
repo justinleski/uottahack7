@@ -105,3 +105,12 @@ create table if not exists users_coins_earned (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fx_users_login_id FOREIGN KEY (id) REFERENCES users_main(id) ON DELETE CASCADE
 );
+
+create table if not exists currents (
+    id INT PRIMARY KEY,
+    hat_id INT DEFAULT 0,
+    avatar_id INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fu_users_login_id FOREIGN KEY (id) REFERENCES users_main(id) ON DELETE CASCADE
+);

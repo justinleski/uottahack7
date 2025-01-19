@@ -2,7 +2,7 @@ const client = require("./elasticsearch");
 
 module.exports = async function main(id, slug, lat, lon, balance) {
     try {
-        console.log(balance);
+        console.log(balance, id);
         await client.index({
             index: 'scoreboard',
             id,

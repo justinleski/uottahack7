@@ -28,5 +28,7 @@
   "get_price_hat": "select price from hats where hat_id = ?",
   "get_price_avatar": "select price from avatars where avatar_id = ?",
   "get_earned": "select balance from users_coins_earned where id = ?",
-  "update_earned": "INSERT INTO users_coins_earned (id, balance) VALUES (?, ?) ON DUPLICATE KEY UPDATE balance = VALUES(balance);"
+  "update_earned": "INSERT INTO users_coins_earned (id, balance) VALUES (?, ?) ON DUPLICATE KEY UPDATE balance = VALUES(balance);",
+  "update_hat": "INSERT INTO currents (id, hat_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE hat_id = VALUES(hat_id);",
+  "update_avatar": "INSERT INTO currents (id, avatar_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE avatar_id = VALUES(avatar_id);"
 }
