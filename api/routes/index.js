@@ -43,9 +43,7 @@ module.exports = (app) => {
 
     app.use("/test", test());
 
-    app.use((req, res) => {
-        res.sendStatus(404);
-    });
+    app.use((req, res) => res.sendFile(path.join(__dirname, '../../animal-tracker/dist', 'index.html')));
 
     app.use((err, req, res, next) => {
         console.log(err);

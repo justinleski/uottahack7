@@ -15,6 +15,7 @@ module.exports = async function main(req, res) {
         const slug = req.session.user.slug;
 
         if (!file || !lat || !lon || !id) {
+            res.status(400).json({message: "Oups, something went wrong..."});
             res.sendStatus(400);
             return;
         }
@@ -22,6 +23,7 @@ module.exports = async function main(req, res) {
         const obj = await aws_upload(file);
         console.log(obj, "The image seems to have been added to AWS");
         if (obj.error) {
+            res.status(400).json({message: "Oups, something went wrong..."});
             res.sendStatus(500);
             return;
         }
@@ -32,14 +34,14 @@ module.exports = async function main(req, res) {
         const isModerated = await groq.moderate(url);
         console.log(isModerated);
         if (isModerated.error || isModerated.response.toLowerCase().startsWith("no")) {
-            res.sendStatus(400);
+            res.status(400).json({message: "Oups, looks like you didn't upload an animal..."});
             return;
         }
 
         const isAnimals = await groq.isAnimal(url);
         console.log(isAnimals);
         if (isAnimals.error || isAnimals.response.toLowerCase().startsWith("no")) {
-            res.sendStatus(400);
+            res.status(400).json({message: "Oups, looks like you didn't upload an animal..."});
             return;
         }
 
@@ -49,14 +51,14 @@ module.exports = async function main(req, res) {
         const actualAnimal = await getAnimal(animalObj.response);
         console.log(actualAnimal);
         if (!actualAnimal) {
-            res.sendStatus(400);
+            res.status(400).json({message: "Oups, something went wrong..."});
             return;
         }
 
         console.log(actualAnimal);
 
         if (!req.session.user) {
-            res.sendStatus(403);
+            res.status(400).json({message: "Oups, something went wrong..."});
             return;
         }
         await query({name: "add_image", params: [req.session.user.id, obj.url, actualAnimal]});
@@ -85,10 +87,10 @@ module.exports = async function main(req, res) {
 
         await addPerson(id, slug, lat, lon, newBalanceTotal);
 
-        res.json({url: obj.url});
+        res.json({url: obj.url, message: "Wow! Awesome "+actualAnimal+" you got!"});
     }
     catch (e) {
         console.log(e);
-        res.sendStatus(500);
+        res.status(500).json({message: "Oups, something went wrong..."});
     }
 }
