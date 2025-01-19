@@ -1,6 +1,6 @@
 # uottahack7
 
-![plot](./SnapWild.jpg)
+<img src="./SnapWild.jpg" alt="plot" width="300">
 
 # WildSnap Canada
 
