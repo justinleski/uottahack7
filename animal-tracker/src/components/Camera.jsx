@@ -9,6 +9,11 @@ function Camera() {
         facingMode: "environment",
     });
 
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupText, setPopupText] = useState("Recognising the animal...");
+    const [popupImage, setPopupImage] = useState(null);
+    const [canClosePopup, setCanClosePopup] = useState(false);
+
     const updateVideoConstraints = () => {
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
@@ -47,8 +52,15 @@ function Camera() {
 
     const sendImageToBackend = async (imageSrc) => {
         try {
+            setPopupImage(imageSrc);
+            setShowPopup(true);
+            setPopupText("Recognising the animal...");
+            setCanClosePopup(false);
             const location = await getLocation();
             const { latitude, longitude } = location;
+
+            // Set popup image and show the popup
+ 
 
             const response = await fetch(imageSrc);
             const blob = await response.blob(); // Convert base64 imageSrc to a Blob
@@ -64,12 +76,17 @@ function Camera() {
             });
 
             if (result.ok) {
-                console.log("Image and location sent successfully!");
+                const data = await result.json();
+                setPopupText(data.message || "No message received");
+                setCanClosePopup(true);
             } else {
-                console.error("Failed to send data to the backend.");
+                setPopupText(data.message || "An error occurred. Please try again.");
+                setCanClosePopup(true);
             }
         } catch (error) {
             console.error("Error sending data:", error);
+            setPopupText("An error occurred. Please try again.");
+            setCanClosePopup(true);
         }
     };
 
@@ -82,6 +99,7 @@ function Camera() {
             >
                 {({ getScreenshot }) => (
                     <button
+                        id="camera-button-main"
                         className="camera-button"
                         onClick={() => {
                             const imageSrc = getScreenshot();
@@ -94,6 +112,29 @@ function Camera() {
                     </button>
                 )}
             </Webcam>
+
+            {showPopup && (
+                <div className="popup">
+                    <div className="popup-content">
+                        <p>{popupText}</p>
+                        {popupImage && (
+                            <img
+                                src={popupImage}
+                                alt="Captured"
+                                style={{ width: "100%", height: "auto", marginTop: "10px" }}
+                            />
+                        )}
+                        {canClosePopup && (
+                            <button
+                                className="close-button"
+                                onClick={() => setShowPopup(false)}
+                            >
+                                &#10006; {/* Cross icon */}
+                            </button>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
