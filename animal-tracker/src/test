@@ -1,0 +1,15 @@
+GET /user/getProfile {name and animal, coins, avatar (link, not the image)}
+GET /user/getProfile?slug="some slug" {name and animal, coins, avatar (link, not the image)}
+POST /user/profileUpdate {name and animal}
+
+GET /user/images [{url}, {url}]
+GET /user/images?slug="some slug" [{url}, {url}]
+
+
+
+
+
+
+POST /user/post {image -> img tag, .jpeg/.jpg format} (use canvas?), also lat and lon
+
+

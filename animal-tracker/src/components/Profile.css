@@ -5,8 +5,17 @@
     align-items: center;
 }
 
+.coin-counter{
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    top: 2em;
+    right: 2em;
+
+}
+
 .profile-top{
-    font-size: 5vw;
+    font-size: 4em;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -16,7 +25,12 @@
     /*padding-top: 0;*/
 }
 
-.profile-top p i{
-    padding: 50px;
+.username{
+    padding-left: 100px;
     padding-bottom: 2px;
+}
+
+.user-avatar{
+    width: 30%;
+    height: 30%;
 }

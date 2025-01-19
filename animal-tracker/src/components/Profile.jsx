@@ -5,9 +5,13 @@ const Profile = () => {
     return (
         <div className="profile-container">
 
+            <div className="coin-counter">
+AAAA
+            </div>
+
             <div className="profile-top">
-                {/*This <i> tag is a placeholder, change it to the user's avatar*/}
-                <i className="bi bi-circle"></i>
+                {/*This <img> tag is a placeholder, change it to the user's avatar*/}
+                <img src="https://i.imgflip.com/8h26xs.png" alt="" className="user-avatar"/>
                 <p className="username">Insert User Name</p>
             </div>
 
