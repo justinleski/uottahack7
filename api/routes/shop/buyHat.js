@@ -10,6 +10,7 @@ module.exports = async function main(req, res) {
         }
 
         const hat_id = req.body.pid;
+        console.log(hat_id, ")))))");
         if (!hat_id) {
             res.sendStatus(400);
             return;
@@ -23,6 +24,7 @@ module.exports = async function main(req, res) {
             return;
         }
 
+        console.log(price, coins);
         if (price > coins) {
             res.sendStatus(402);
             return;

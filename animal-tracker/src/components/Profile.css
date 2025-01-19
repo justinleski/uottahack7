@@ -8,6 +8,7 @@
 }
 
 .profile-container {
+    margin-bottom: 20vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -119,3 +120,24 @@
     color: var(--primary-white);
 }
 
+
+.shop-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.shop-item {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0.5rem;
+    text-align: center;
+    width: 120px;
+}
+
+.shop-item-img {
+    max-width: 100%;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+}

@@ -2,14 +2,14 @@ const client = require("./elasticsearch");
 
 function getPrecisionFromRadiusKm(radiusKm) {
     // Very naive approach, you can tweak as you see fit
-    if (radiusKm >= 500) return 2;  // huge area
-    if (radiusKm >= 100) return 3;
-    if (radiusKm >= 20)  return 4;
-    if (radiusKm >= 5)   return 5;
-    if (radiusKm >= 1)   return 6;
-    if (radiusKm >= 0.2) return 7;
-    if (radiusKm >= 0.05) return 8;
-    return 9;
+    if (radiusKm >= 500) return 5;  // huge area
+    if (radiusKm >= 100) return 7;
+    if (radiusKm >= 20)  return 8;
+    if (radiusKm >= 5)   return 8;
+    if (radiusKm >= 1)   return 10;
+    if (radiusKm >= 0.2) return 10;
+    if (radiusKm >= 0.05) return 10;
+    return 10;
 }
 
 // async function main({ lat, lon, radiusKm }) {
@@ -84,7 +84,7 @@ function getPrecisionFromRadiusKm(radiusKm) {
 // }
 
 async function main({ lat, lon, radiusKm }) {
-    const precision = getPrecisionFromRadiusKm(radiusKm);
+    const precision = 10;
 
     const response = await client.search({
         index: 'images_index',

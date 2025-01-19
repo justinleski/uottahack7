@@ -1,9 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import "leaflet/dist/leaflet.css";
 import L from 'leaflet';
 import './Map.css';
-import Modal from './Modal'; // Import the Modal component
+import Modal from './Modal';
 
 const fetchNearbyLocations = async (lat, lon, radius) => {
     const response = await fetch('/user/nearme', {
@@ -12,6 +12,7 @@ const fetchNearbyLocations = async (lat, lon, radius) => {
         body: JSON.stringify({ lat, lon, radius }),
     });
     const data = await response.json();
+    console.log(data);
     return data;
 };
 
@@ -21,7 +22,6 @@ const Map = () => {
     const [modalData, setModalData] = useState(null);
     const [coordinates, setCoordinates] = useState([]);
     const lastZoomLevelRef = useRef(null);
-    const lastCenterRef = useRef(null);
 
     const createCustomDivIcon = (imgSrc) => L.divIcon({
         className: 'custom-marker',
@@ -48,43 +48,31 @@ const Map = () => {
     };
 
     const bounds = [
-        [-80, -180], // Southwest corner (latitude, longitude)
-        [90, 180],  // Northeast corner (latitude, longitude)
+        [-80, -180],
+        [90, 180],
     ];
-
-    const hasSignificantChange = (currentZoom, lastZoom, currentCenter, lastCenter) => {
-        const zoomChanged = lastZoom === null || Math.abs((currentZoom - lastZoom) / lastZoom) > 0.1;
-
-        const latChange = Math.abs(currentCenter.lat - lastCenter.lat);
-        const lonChange = Math.abs(currentCenter.lng - lastCenter.lng);
-        const significantMove = lastCenter === null || latChange > 0.1 || lonChange > 0.1;
-
-        return zoomChanged || significantMove;
-    };
 
     const MapEventsHandler = () => {
         const map = useMapEvents({
-            moveend: () => {
+            zoomend: () => {
                 const currentZoom = map.getZoom();
-                const currentCenter = map.getCenter();
                 const lastZoom = lastZoomLevelRef.current;
-                const lastCenter = lastCenterRef.current;
 
-                if (hasSignificantChange(currentZoom, lastZoom, currentCenter, lastCenter)) {
+                if (lastZoom === null || Math.abs((currentZoom - lastZoom) / lastZoom) > 0.25) {
                     lastZoomLevelRef.current = currentZoom;
-                    lastCenterRef.current = currentCenter;
 
+                    const center = map.getCenter();
                     const bounds = map.getBounds();
                     const radius = map.distance(bounds.getSouthWest(), bounds.getNorthEast()) / 2;
 
-                    // Fetch new data from the backend
-                    fetchNearbyLocations(currentCenter.lat, currentCenter.lng, radius).then((data) => {
+                    fetchNearbyLocations(center.lat, center.lng, radius).then((data) => {
                         const newCoordinates = data.map(item => ({
                             lat: item.location.lat,
                             lng: item.location.lon,
                             imgSrc: item.url,
-                            slug: item.slug, // Include slug in the data
-                            name: item.slug, // Fallback for marker name
+                            name: item.slug,
+                            slug: item.slug, // Include slug for modal details
+                            animal: item.animal
                         }));
                         setCoordinates(newCoordinates);
                     });
@@ -97,15 +85,15 @@ const Map = () => {
 
     return (
         <div className="map-wrapper">
-            {/* Map Display */}
+            {/* Map */}
             <MapContainer
                 center={position}
                 zoom={2}
                 scrollWheelZoom={true}
                 className="leaflet-map"
                 minZoom={2}
-                maxBounds={bounds} // Restrict user from panning out of bounds
-                maxBoundsViscosity={1.0} // Adjust the "stickiness" when hitting the bounds
+                maxBounds={bounds}
+                maxBoundsViscosity={1.0}
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -117,7 +105,7 @@ const Map = () => {
                         position={[location.lat, location.lng]}
                         icon={createCustomDivIcon(location.imgSrc)}
                         eventHandlers={{
-                            click: () => handleMarkerClick(location), // Pass the entire location object to Modal
+                            click: () => handleMarkerClick(location),
                         }}
                     />
                 ))}
@@ -125,7 +113,11 @@ const Map = () => {
             </MapContainer>
 
             {/* Modal */}
-            <Modal isOpen={isModalOpen} onClose={closeModal} content={modalData} />
+            <Modal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                content={modalData}
+            />
         </div>
     );
 };

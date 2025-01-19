@@ -18,9 +18,9 @@
   "are_friends": "SELECT 1 FROM friends WHERE (user_id = ? AND friend_id = ?)  OR (user_id = ? AND friend_id = ?)",
   "get_friends": "SELECT CASE  WHEN user_id = ? THEN friend_id ELSE user_id END AS friend_id FROM friends WHERE user_id = ? OR friend_id = ?",
   "get_hats": "select hat_id from hats_ownership where user_id = ?",
-  "get_all_hats": "select hat_id from hats",
+  "get_all_hats": "select hat_id, price, url from hats",
   "get_avatars": "select avatar_id from avatars_ownership where user_id = ?",
-  "get_all_avatars": "select avatar_id from avatars",
+  "get_all_avatars": "select avatar_id, price, url from avatars",
   "get_money": "select balance from users_coins where id = ?",
   "buy_hat": "INSERT INTO hats_ownership (user_id, hat_id) VALUES (?, ?)",
   "buy_avatar": "INSERT INTO avatars_ownership (user_id, avatar_id) VALUES (?, ?)",
@@ -30,5 +30,9 @@
   "get_earned": "select balance from users_coins_earned where id = ?",
   "update_earned": "INSERT INTO users_coins_earned (id, balance) VALUES (?, ?) ON DUPLICATE KEY UPDATE balance = VALUES(balance);",
   "update_hat": "INSERT INTO currents (id, hat_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE hat_id = VALUES(hat_id);",
-  "update_avatar": "INSERT INTO currents (id, avatar_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE avatar_id = VALUES(avatar_id);"
+  "update_avatar": "INSERT INTO currents (id, avatar_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE avatar_id = VALUES(avatar_id);",
+  "get_avatar": "select avatar_id from currents where id = ?",
+  "get_hat": "select hat_id from currents where id = ?",
+  "get_avatar_url": "select url from avatars where id = ?",
+  "get_hat_url": "select url from hats where id = ?"
 }

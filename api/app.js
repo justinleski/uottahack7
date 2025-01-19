@@ -18,18 +18,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set('trust proxy', 1);
 app.use(cookieParser());
 app.use(session({
-    name: "sid",
     secret: "secret",
     store: new RedisStore({ client: redisClient }),
     resave: false,
     saveUninitialized: false,
-    proxy: true,
     cookie: {
-        secure: false,
-        maxAge: Number(process.env.SERVER_INACTIVITY_TIMEOUT)*10,
-        sameSite: 'Lax',
-        httpOnly: true,
-        path: "/"
+        secure: false
     } // Set secure: true if using HTTPS
 }));
 

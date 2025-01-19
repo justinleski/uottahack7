@@ -12,19 +12,15 @@ const query = require("../db/access/query");
 const crypto = require("crypto");
 
 async function isLogged(req, res, next) {
-    console.log(req.cookies);
-    if (!req.session.user) {
-        const ssid = crypto.randomBytes(16).toString("hex");
-        const {insertId} = await query({name: "create_user_main", params: [ssid]});
-        req.session.user = {
-            slug: ssid,
-            id: insertId
-        };
-        next();
-    }
-    else {
-        next();
-    }
+    // console.log(req.cookies, "1231232");
+    // console.log(req.session.user, "1232123123");
+    // if (!req.session.user) {
+    //     res.sendStatus(403);
+    //     return;
+    // }
+    // else {
+    //     return next();
+    // }
 }
 
 
@@ -37,10 +33,17 @@ module.exports = (app) => {
     // app.get("/assets", (req, res) => res.sendFile(path.join(__dirname, '../../animal-tracker/dist/assets', 'index.html')))
     app.use(express.static(path.join(__dirname, '../../animal-tracker/dist')));
 
-    app.use("/user", isLogged, userRoutes());
-    app.use("/shop", shop);
+    app.use("/user", userRoutes());
+    app.use("/shop", shop());
 
-    app.use("/test", test());
+    app.use("/login2", (req, res)=>{
+        console.log(1);
+        req.session.user = {
+            id: 1,
+            uuid: "leopard"
+        };
+        res.sendStatus(200);
+    });
 
     app.use((req, res) => res.sendFile(path.join(__dirname, '../../animal-tracker/dist', 'index.html')));
 

@@ -18,7 +18,7 @@ module.exports = async function main(req, res) {
             return i;
         }));
 
-        console.log(res);
+        console.log(ressss, "RESSSSSS");
         res.json(ressss);
 
     }

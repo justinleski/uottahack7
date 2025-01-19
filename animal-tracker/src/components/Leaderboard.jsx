@@ -1,41 +1,75 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Leaderboard.css";
 
 const Leaderboard = () => {
-  const leaderboardData = [
-    { name: "Player1", score: 1200 },
-    { name: "Player2", score: 1100 },
-    { name: "Player3", score: 1050 },
-    { name: "Player4", score: 900 },
-    { name: "Player5", score: 850 },
-    { name: "Player6", score: 800 },
-    { name: "Player7", score: 750 },
-    { name: "Player8", score: 700 },
-    { name: "Player9", score: 650 },
-    { name: "Player10", score: 600 },
-  ];
+  const [leaderboardData, setLeaderboardData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLeaderboardData = async () => {
+      try {
+        // Fetch the scoreboard data
+        const scoreboardResponse = await fetch("/user/scoreboard");
+        const scoreboard = await scoreboardResponse.json();
+
+        // Map over the scoreboard and fetch additional details for each user
+        const userProfiles = await Promise.all(
+            scoreboard.map(async (user) => {
+              const profileResponse = await fetch(`/user/profile?slug=${user.slug}`);
+              console.log(user.slug, profileResponse);
+              const profile = await profileResponse.json();
+              console.log(profile);
+              return {
+                ...profile,
+                self: user.self,
+              };
+            })
+        );
+
+        // Update the leaderboard data
+        setLeaderboardData(userProfiles);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching leaderboard data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchLeaderboardData();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <div className="leaderboard-container">
-      <h2 className="leaderboard-title">Leaderboard</h2>
-      <div className="leaderboard-scroll">
-        <ul className="leaderboard-list">
-          {leaderboardData.map((player, index) => (
-            <li key={index} className="leaderboard-item">
+      <div className="leaderboard-container">
+        <h2 className="leaderboard-title">Leaderboard</h2>
+        <div className="leaderboard-scroll">
+          <ul className="leaderboard-list">
+            {leaderboardData.map((player, index) => (
+                <li
+                    key={index}
+                    className={`leaderboard-item ${player.self ? "self-highlight" : ""}`}
+                >
               <span
-                className={`rank ${
-                  index === 0 ? "gold" : index === 1 ? "silver" : index === 2 ? "bronze" : ""
-                }`}
+                  className={`rank ${
+                      index === 0 ? "gold" : index === 1 ? "silver" : index === 2 ? "bronze" : ""
+                  }`}
               >
                 {index + 1}
               </span>
-              <span className="name">{player.name}</span>
-              <span className="score">{player.score} WildCoins</span>
-            </li>
-          ))}
-        </ul>
+                    <span>Name: </span>
+                  <span className="name">{player.name}</span>
+                    <span>  Favorite Animal: </span>
+                  <span className="animal">   {player.animal}  </span>
+                    <span>   Coins earned: </span>
+                  <span className="coins">   {player.balance}  </span>
+                </li>
+            ))}
+          </ul>
+        </div>
       </div>
-    </div>
   );
 };
 

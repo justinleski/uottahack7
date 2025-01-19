@@ -14,7 +14,7 @@ const nearme = require("./nearme");
 const scoreboard = require("./scoreboard");
 
 module.exports = function main() {
-    router.post("/profileUpdate", setProfile);
+    router.post("/profileUpdate",express.json(), setProfile);
     router.get("/profile", getProfile);
     router.post("/post", multer.single("image"),express.json(), post);
     router.get("/images", getImages);

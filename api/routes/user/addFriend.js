@@ -5,6 +5,7 @@ module.exports = async function main(req, res) {
         const friend_slug = req.body.slug;
         const my_id = req.session.user.id;
 
+        console.log(req.body);
         if (!friend_slug) {
             res.sendStatus(400);
             return;
