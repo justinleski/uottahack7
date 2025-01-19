@@ -13,10 +13,9 @@ function Camera() {
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
 
-        // Adjust constraints based on viewport size
         const newConstraints = {
-            width: viewportWidth, // Use a max width of 1280
-            height: viewportHeight, // Use a max height of 720
+            width: viewportWidth,
+            height: viewportHeight,
             facingMode: "environment",
         };
 
@@ -24,19 +23,54 @@ function Camera() {
     };
 
     useEffect(() => {
-        updateVideoConstraints(); // Set initial constraints
+        updateVideoConstraints();
 
-        // Listen for viewport size changes
         window.addEventListener("resize", updateVideoConstraints);
-
-        // Cleanup event listener
         return () => window.removeEventListener("resize", updateVideoConstraints);
     }, []);
 
+    const getLocation = () => {
+        return new Promise((resolve, reject) => {
+            if (!navigator.geolocation) {
+                reject(new Error("Geolocation is not supported by your browser."));
+            } else {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const { latitude, longitude } = position.coords;
+                        resolve({ latitude, longitude });
+                    },
+                    (error) => reject(error)
+                );
+            }
+        });
+    };
+
     const sendImageToBackend = async (imageSrc) => {
-        console.log("Image captured successfully!");
-        if (!imageSrc) return;
-        // Add logic for sending imageSrc to backend if needed
+        try {
+            const location = await getLocation();
+            const { latitude, longitude } = location;
+
+            const response = await fetch(imageSrc);
+            const blob = await response.blob(); // Convert base64 imageSrc to a Blob
+
+            const formData = new FormData();
+            formData.append("image", blob, "photo.jpg"); // Set filename as "photo.jpg"
+            formData.append("latitude", latitude);
+            formData.append("longitude", longitude);
+
+            const result = await fetch("/user/post", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (result.ok) {
+                console.log("Image and location sent successfully!");
+            } else {
+                console.error("Failed to send data to the backend.");
+            }
+        } catch (error) {
+            console.error("Error sending data:", error);
+        }
     };
 
     return (

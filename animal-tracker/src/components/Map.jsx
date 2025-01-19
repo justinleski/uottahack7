@@ -40,7 +40,7 @@ const Map = () => {
     };
 
     const bounds = [
-        [-60, -180], // Southwest corner (latitude, longitude)
+        [-80, -180], // Southwest corner (latitude, longitude)
         [90, 180],  // Northeast corner (latitude, longitude)
     ];
 

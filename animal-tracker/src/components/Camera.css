@@ -26,14 +26,18 @@
     align-items: center;
     display: flex;
     border-radius: 100%;
-    border: 2px solid var(--highlight-yellow);
+    border: 10px solid #FFF;
     position: absolute;
     left: calc(50% - 25px);
     bottom: 6rem;
 }
 
+.camera-button > *{
+    display: none;
+}
+
 .camera-button:hover {
-    background-color: var(--highlight-yellow);
-    color: var(--primary-white);
+    background-color: #FFF;
+    /* color: var(--primary-white); */
     transition: all 0.3s ease-in-out;
 }
