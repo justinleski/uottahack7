@@ -4,3 +4,12 @@
     height: 60vh;
 }
 
+.custom-marker {
+    display: flex;
+    flex-direction: column;
+    padding: 4px;
+    border-radius: 1.2rem;
+    max-width: 10px;
+    max-height: 10px;
+}
+
