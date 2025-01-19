@@ -1,11 +1,17 @@
+:root {
+    --primary-white: #FFFFFF;
+    --light-gray: #E7ECF0;
+    --primary-green: #6EA868;
+    --dark-green: #54974D;
+    --highlight-yellow: #FFCA28;
+}
+
 .camera-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2em;
-
-    /*width: 100vw;*/
-    /*height: 100vh;*/
+    flex-grow: 1;
+    overflow: hidden;
 }
 
 .camera-button {
@@ -20,9 +26,18 @@
     align-items: center;
     display: flex;
     border-radius: 100%;
+    border: 10px solid #FFF;
+    position: absolute;
+    left: calc(50% - 25px);
+    bottom: 6rem;
+}
+
+.camera-button > *{
+    display: none;
 }
 
 .camera-button:hover {
-    background-color: white;
-    transition: background-color 0.1s ease-in, opacity 0.1s ease-in;
+    background-color: #FFF;
+    /* color: var(--primary-white); */
+    transition: all 0.3s ease-in-out;
 }

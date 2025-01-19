@@ -1,28 +1,28 @@
-/*body{*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    align-items: center;*/
-/*    place-items: center;*/
-/*}*/
 
-.buttons-container{
+:root {
+    --primary-white: #FFFFFF;
+    --light-gray: #E7ECF0;
+    --primary-green: #6EA868;
+    --dark-green: #54974D;
+    --highlight-yellow: #FFCA28;
+}
+
+.buttons-container {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-
-    background-color: pink;
+    background-color: var(--primary-green);
     height: 4.5em;
-
-
     width: 100%;
     box-sizing: border-box;
-
-    position: fixed;
-    bottom: 0;
+    flex-grow: 1;
+    max-height: 4.2rem;
+    border-top: 2px solid var(--dark-green);
+    order: 2;
 }
 
-.icons-row{
+.icons-row {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -30,12 +30,13 @@
     width: 1280px;
 }
 
-.icons-row i{
-    font-size: 3em;
-    color: whitesmoke   ;
+.icons-row i {
+    font-size: 2.5em;
+    color: var(--primary-white);
+    transition: color 0.2s ease, transform 0.2s ease;
 }
 
-.icons-row i:hover{
-    color: #213547;
+.icons-row i:hover {
+    color: var(--highlight-yellow);
+    transform: scale(1.2);
 }
-

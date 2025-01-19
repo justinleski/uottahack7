@@ -1,89 +1,88 @@
-import React from 'react';
-import { useState } from 'react';
-import Modal from "./Modal.jsx";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup
-} from 'react-leaflet';
+import React, { useState } from 'react';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import "leaflet/dist/leaflet.css";
 import L from 'leaflet';
 import './Map.css';
 
 const Map = () => {
+    const position = [0, 0];
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalData, setModalData] = useState(null);
 
-  // to position the map
-  const position = [0, 0];
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [animalImage, setAnimalImage] = useState(null);
+    const coordinates = [
+        { lat: 50.505, lng: -0.09, imgSrc: 'https://placehold.co/600x400/png', name: "Location 1" },
+        { lat: 51.515, lng: -0.1, imgSrc: 'https://placehold.co/600x400/png', name: "Location 2" },
+        { lat: 1.525, lng: -0.08, imgSrc: 'https://placehold.co/600x400/png', name: "Location 3" },
+    ];
 
-  // sample data
-  const coordinates = [
-    { lat: 500.505, lng: -0.09, imgSrc: 'https://images.pexels.com/photos/406014/pexels-photo-406014.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
-    { lat: 51.515, lng: -0.1, imgSrc: 'https://images.pexels.com/photos/1851164/pexels-photo-1851164.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
-    { lat: 1.525, lng: -0.08, imgSrc: 'https://images.pexels.com/photos/406014/pexels-photo-406014.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
-  ];
-
-  const createCustomDivIcon = (imgSrc) => L.divIcon({
-      className: 'custom-marker',
-      html: `<div style="
-      padding: 1.5px; 
-      width: 40px; 
-      height: 60px; 
-      border-radius: 0.5rem; 
-      background-color:rgb(255, 255, 255); 
-      display: flex; 
-      flex-direction: column; 
-      align-items: center; 
-      justify-content: center; 
-      color: black;
-      text-align: center;">
-        <img src="${imgSrc}" style="width: 100%; height: 35px; border-radius: 0.5rem; object-fit: cover;">
-    </div>`,
-      iconSize: [15, 15], // Width and height of the div
-      iconAnchor: [10, 20] // Center the icon
+    const createCustomDivIcon = (imgSrc) => L.divIcon({
+        className: 'custom-marker',
+        html: `<div style="
+            width: 40px;
+            height: 60px;
+            border-radius: 5px;
+            background-color: var(--primary-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;">
+            <img src="${imgSrc}" style="width: 100%; height: 100%; border-radius: 5px; object-fit: cover;">
+        </div>`
     });
 
-    const handleMarkerClick = (imgSrc) => {
-      setAnimalImage(imgSrc);
-      setIsModalOpen(true);
+    const handleMarkerClick = (data) => {
+        setModalData(data);
+        setIsModalOpen(true);
     };
-  
+
     const closeModal = () => {
-      setIsModalOpen(false);
-      setAnimalImage(null);
+        setIsModalOpen(false);
+        setModalData(null);
     };
+
+    const bounds = [
+        [-80, -180], // Southwest corner (latitude, longitude)
+        [90, 180],  // Northeast corner (latitude, longitude)
+    ];
 
     return (
-      <>
-        <MapContainer center={position} zoom={1} scrollWheelZoom={true}>
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          {coordinates.map(({ lat, lng, imgSrc }, index) => (
-              <Marker
-                key={index}
-                position={[lat, lng]}
-                icon={createCustomDivIcon(imgSrc)}
-                eventHandlers={{
-                  click: () => handleMarkerClick({ imgSrc }),
-                }}
-              />
-            ))}
-        </MapContainer>
+        <div className="map-wrapper">
+            {/* Map Display */}
+            <MapContainer center={position} zoom={2} scrollWheelZoom={true} className="leaflet-map" minZoom={2}
+            maxBounds={bounds} // Restrict user from panning out of bounds
+            maxBoundsViscosity={1.0} // Adjust the "stickiness" when hitting the bounds
+            >
+                <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                {coordinates.map((location, index) => (
+                    <Marker
+                        key={index}
+                        position={[location.lat, location.lng]}
+                        icon={createCustomDivIcon(location.imgSrc)}
+                        eventHandlers={{
+                            click: () => handleMarkerClick(location),
+                        }}
+                    />
+                ))}
+            </MapContainer>
 
-        {animalImage && <Modal // ensures it runs only when jsonData is not null
-            plantData={animalImage}
-            isVisible={isModalOpen} 
-            onClose={closeModal} 
-            //onSubmit={handleSubmit} 
-            //onSearch={handleSearch}
-        />}
-      </>
+            {/* Modal */}
+            {isModalOpen && modalData && (
+                <div className="focus-modal" onClick={closeModal}>
+                    <div className="animal-modal" onClick={(e) => e.stopPropagation()}>
+                        <h3>{modalData.name}</h3>
+                        <img
+                            src={modalData.imgSrc}
+                            alt="Location"
+                            style={{ width: '100%', borderRadius: '10px', marginBottom: '1rem' }}
+                        />
+                        <button onClick={closeModal}>Close</button>
+                    </div>
+                </div>
+            )}
+        </div>
     );
-  
 };
 
 export default Map;
