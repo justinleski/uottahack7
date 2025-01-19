@@ -12,7 +12,7 @@ const upload = multerPost({
 
     // File filter (JPEG only)
     fileFilter: (req, file, cb) => {
-        const allowedMimeTypes = ["image/jpeg"];
+        const allowedMimeTypes = ["image/jpeg", "image/jpg"];
 
         if (allowedMimeTypes.includes(file.mimetype)) {
             cb(null, true); // Accept the file

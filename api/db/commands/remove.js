@@ -39,5 +39,5 @@ async function executeSQLFromFile(filePath) {
 }
 
 // Specify the path to your SQL file
-const sqlFilePath = './api/db/commands/remove.sql'; // Replace with the actual path
+const sqlFilePath = './db/commands/remove.sql'; // Replace with the actual path
 executeSQLFromFile(sqlFilePath);

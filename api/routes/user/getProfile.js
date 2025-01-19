@@ -2,7 +2,7 @@ const query = require("../../db/access/query");
 
 module.exports = async function main(req, res) {
     try {
-        const slug = req.query.slug;
+        const slug = req.query.slug || req.session.user.slug;
 
         console.log(slug);
         if (!slug) {
@@ -14,8 +14,8 @@ module.exports = async function main(req, res) {
             console.log(id);
             if (!id) throw new Error();
             const personal = (await query({name: "get_personal", params: [id]}));
-            console.log(personal[0]);
-            res.json(personal[0]);
+            console.log(personal[0], "123212313");
+            res.json(personal[0] || {name: "Rocko-u-o-u-on", animal: "Capibara"});
         }
         catch (e) {
             console.log(e);

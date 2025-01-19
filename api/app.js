@@ -28,7 +28,8 @@ app.use(session({
         secure: false,
         maxAge: Number(process.env.SERVER_INACTIVITY_TIMEOUT),
         sameSite: 'Lax',
-        httpOnly: true
+        httpOnly: true,
+        path: "/"
     } // Set secure: true if using HTTPS
 }));
 

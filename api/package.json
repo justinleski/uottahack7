@@ -1,0 +1,36 @@
+{
+  "name": "wildaround",
+  "version": "1.0.0",
+  "description": "app for connection with nature with your friends",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db_create": "node ./db/commands/create.js",
+    "db_remove": "node ./db/commands/remove.js",
+    "api": "node app.js",
+    "elastic": "node elastic/indeexInit.js"
+  },
+  "author": "Nikolai and Team",
+  "license": "ISC",
+  "devDependencies": {
+    "axios": "^1.7.9",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.7",
+    "express-session": "^1.18.1",
+    "groq-sdk": "^0.12.0",
+    "mysql2": "^3.12.0",
+    "nodemailer": "^6.9.16",
+    "p-queue": "^6.6.2"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.731.1",
+    "@aws-sdk/lib-storage": "^3.731.1",
+    "@elastic/elasticsearch": "^8.17.0",
+    "body-parser": "^1.20.3",
+    "connect-redis": "^8.0.1",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1",
+    "redis": "^4.7.0"
+  }
+}
