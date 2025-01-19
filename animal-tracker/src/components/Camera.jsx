@@ -80,6 +80,7 @@ function Camera() {
                 setPopupText(data.message || "No message received");
                 setCanClosePopup(true);
             } else {
+                const data = await result.json();
                 setPopupText(data.message || "An error occurred. Please try again.");
                 setCanClosePopup(true);
             }
