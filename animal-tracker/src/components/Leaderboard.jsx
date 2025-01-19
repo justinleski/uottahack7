@@ -1,4 +1,3 @@
-
 import React from "react";
 import "./Leaderboard.css";
 
@@ -19,21 +18,23 @@ const Leaderboard = () => {
   return (
     <div className="leaderboard-container">
       <h2 className="leaderboard-title">Leaderboard</h2>
-      <ul className="leaderboard-list">
-        {leaderboardData.map((player, index) => (
-          <li key={index} className="leaderboard-item">
-            <span
-              className={`rank ${
-                index === 0 ? "gold" : index === 1 ? "silver" : index === 2 ? "bronze" : ""
-              }`}
-            >
-              {index + 1}
-            </span>
-            <span className="name">{player.name}</span>
-            <span className="score">{player.score} WildCoins</span>
-          </li>
-        ))}
-      </ul>
+      <div className="leaderboard-scroll">
+        <ul className="leaderboard-list">
+          {leaderboardData.map((player, index) => (
+            <li key={index} className="leaderboard-item">
+              <span
+                className={`rank ${
+                  index === 0 ? "gold" : index === 1 ? "silver" : index === 2 ? "bronze" : ""
+                }`}
+              >
+                {index + 1}
+              </span>
+              <span className="name">{player.name}</span>
+              <span className="score">{player.score} WildCoins</span>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

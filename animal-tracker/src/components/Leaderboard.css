@@ -1,59 +1,118 @@
-
 :root {
   --primary-white: #FFFFFF;
   --light-gray: #E7ECF0;
   --primary-green: #6EA868;
   --dark-green: #54974D;
   --highlight-yellow: #FFCA28;
+  --gold: #FFD700;
+  --silver: #C0C0C0;
+  --bronze: #CD7F32;
 
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color-scheme: light dark;
-  color: var(--primary-white);
+  font-family: 'Inter', sans-serif;
+}
+
+.leaderboard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
   background-color: var(--light-gray);
+  color: var(--dark-green);
+  flex-grow: 1;
+  height: 100vh; /* Full viewport height */
+  box-sizing: border-box;
+  overflow: hidden; /* Prevent overflow issues */
 }
 
-a {
-  font-weight: 500;
+.leaderboard-title {
+  font-size: 1.8rem;
+  font-weight: bold;
   color: var(--dark-green);
-  text-decoration: none;
+  margin-bottom: 1rem;
 }
-a:hover {
+
+.leaderboard-scroll {
+  width: 100%;
+  max-width: 500px;
+  overflow-y: auto; /* Enables vertical scrolling */
+  background-color: var(--primary-white);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  flex-grow: 1; /* Makes the scroll area flexible */
+  max-height: calc(100vh - 120px); /* Adjusts the height to fit within the viewport */
+}
+
+.leaderboard-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.leaderboard-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--primary-white);
+  border-radius: 8px;
+  margin-bottom: 0.8rem; /* Slightly reduced spacing between items */
+  padding: 0.8rem 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.leaderboard-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.rank {
+  font-size: 1.4rem; /* Increased font size */
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--light-gray);
+  color: var(--dark-green);
+}
+
+.rank.gold {
+  background-color: var(--gold);
+  color: var(--primary-white);
+}
+
+.rank.silver {
+  background-color: var(--silver);
+  color: var(--primary-white);
+}
+
+.rank.bronze {
+  background-color: var(--bronze);
+  color: var(--primary-white);
+}
+
+.name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--dark-green);
+  flex-grow: 1;
+  margin-left: 1rem;
+}
+
+.score {
+  font-size: 1rem;
+  font-weight: 600;
   color: var(--primary-green);
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.leaderboard-scroll::-webkit-scrollbar {
+  width: 6px;
 }
 
-button {
-  font-weight: 500;
-  font-family: inherit;
-  background-color: var(--highlight-yellow);
-  border: 1px solid var(--dark-green);
-  cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-button:hover {
-  background-color: var(--dark-green);
-  color: var(--primary-white);
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto var(--primary-green);
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.leaderboard-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--primary-green);
+  border-radius: 10px;
 }

@@ -20,6 +20,7 @@
     max-height: 4.2rem;
     border-top: 2px solid var(--dark-green);
     order: 2;
+    z-index: 1000;
 }
 
 .icons-row {
