@@ -1,6 +1,6 @@
 # uottahack7
 
-<img src="./SnapWild.jpg" alt="plot" width="300">
+<img src="./SnapWild2.jpg" alt="plot" width="300">
 
 # WildSnap Canada
 
