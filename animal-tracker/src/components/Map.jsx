@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import "leaflet/dist/leaflet.css";
 import L from 'leaflet';
 import './Map.css';
+import Modal from './Modal'; // Import the Modal component
 
 const fetchNearbyLocations = async (lat, lon, radius) => {
-    // Replace with your API call
     const response = await fetch('/user/nearme', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -21,6 +21,7 @@ const Map = () => {
     const [modalData, setModalData] = useState(null);
     const [coordinates, setCoordinates] = useState([]);
     const lastZoomLevelRef = useRef(null);
+    const lastCenterRef = useRef(null);
 
     const createCustomDivIcon = (imgSrc) => L.divIcon({
         className: 'custom-marker',
@@ -51,27 +52,39 @@ const Map = () => {
         [90, 180],  // Northeast corner (latitude, longitude)
     ];
 
+    const hasSignificantChange = (currentZoom, lastZoom, currentCenter, lastCenter) => {
+        const zoomChanged = lastZoom === null || Math.abs((currentZoom - lastZoom) / lastZoom) > 0.1;
+
+        const latChange = Math.abs(currentCenter.lat - lastCenter.lat);
+        const lonChange = Math.abs(currentCenter.lng - lastCenter.lng);
+        const significantMove = lastCenter === null || latChange > 0.1 || lonChange > 0.1;
+
+        return zoomChanged || significantMove;
+    };
+
     const MapEventsHandler = () => {
         const map = useMapEvents({
-            zoomend: () => {
+            moveend: () => {
                 const currentZoom = map.getZoom();
+                const currentCenter = map.getCenter();
                 const lastZoom = lastZoomLevelRef.current;
+                const lastCenter = lastCenterRef.current;
 
-                // Calculate the 25% threshold
-                if (lastZoom === null || Math.abs((currentZoom - lastZoom) / lastZoom) > 0.25) {
+                if (hasSignificantChange(currentZoom, lastZoom, currentCenter, lastCenter)) {
                     lastZoomLevelRef.current = currentZoom;
+                    lastCenterRef.current = currentCenter;
 
-                    const center = map.getCenter();
                     const bounds = map.getBounds();
                     const radius = map.distance(bounds.getSouthWest(), bounds.getNorthEast()) / 2;
 
                     // Fetch new data from the backend
-                    fetchNearbyLocations(center.lat, center.lng, radius).then((data) => {
+                    fetchNearbyLocations(currentCenter.lat, currentCenter.lng, radius).then((data) => {
                         const newCoordinates = data.map(item => ({
                             lat: item.location.lat,
                             lng: item.location.lon,
                             imgSrc: item.url,
-                            name: item.slug,
+                            slug: item.slug, // Include slug in the data
+                            name: item.slug, // Fallback for marker name
                         }));
                         setCoordinates(newCoordinates);
                     });
@@ -104,7 +117,7 @@ const Map = () => {
                         position={[location.lat, location.lng]}
                         icon={createCustomDivIcon(location.imgSrc)}
                         eventHandlers={{
-                            click: () => handleMarkerClick(location),
+                            click: () => handleMarkerClick(location), // Pass the entire location object to Modal
                         }}
                     />
                 ))}
@@ -112,19 +125,7 @@ const Map = () => {
             </MapContainer>
 
             {/* Modal */}
-            {isModalOpen && modalData && (
-                <div className="focus-modal" onClick={closeModal}>
-                    <div className="animal-modal" onClick={(e) => e.stopPropagation()}>
-                        <h3>{modalData.name}</h3>
-                        <img
-                            src={modalData.imgSrc}
-                            alt="Location"
-                            style={{ width: '100%', borderRadius: '10px', marginBottom: '1rem' }}
-                        />
-                        <button onClick={closeModal}>Close</button>
-                    </div>
-                </div>
-            )}
+            <Modal isOpen={isModalOpen} onClose={closeModal} content={modalData} />
         </div>
     );
 };

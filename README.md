@@ -1,5 +1,7 @@
 # uottahack7
 
+<img src="./SnapWild2.jpg" alt="plot" width="300">
+
 # WildSnap Canada
 
 **WildSnap Canada** is a citizen science platform that enables users to capture and share photos of animals spotted in the wild across Canada. The app empowers users to contribute to wildlife research and conservation efforts while earning rewards and engaging in educational, gamified activities.
