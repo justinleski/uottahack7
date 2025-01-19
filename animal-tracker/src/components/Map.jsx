@@ -1,19 +1,26 @@
-import React, { useState } from 'react';
-import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import React, { useState, useEffect, useRef } from 'react';
+import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import "leaflet/dist/leaflet.css";
 import L from 'leaflet';
 import './Map.css';
+
+const fetchNearbyLocations = async (lat, lon, radius) => {
+    // Replace with your API call
+    const response = await fetch('/user/nearme', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lat, lon, radius }),
+    });
+    const data = await response.json();
+    return data;
+};
 
 const Map = () => {
     const position = [0, 0];
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalData, setModalData] = useState(null);
-
-    const coordinates = [
-        { lat: 50.505, lng: -0.09, imgSrc: 'https://placehold.co/600x400/png', name: "Location 1" },
-        { lat: 51.515, lng: -0.1, imgSrc: 'https://placehold.co/600x400/png', name: "Location 2" },
-        { lat: 1.525, lng: -0.08, imgSrc: 'https://placehold.co/600x400/png', name: "Location 3" },
-    ];
+    const [coordinates, setCoordinates] = useState([]);
+    const lastZoomLevelRef = useRef(null);
 
     const createCustomDivIcon = (imgSrc) => L.divIcon({
         className: 'custom-marker',
@@ -44,12 +51,48 @@ const Map = () => {
         [90, 180],  // Northeast corner (latitude, longitude)
     ];
 
+    const MapEventsHandler = () => {
+        const map = useMapEvents({
+            zoomend: () => {
+                const currentZoom = map.getZoom();
+                const lastZoom = lastZoomLevelRef.current;
+
+                // Calculate the 25% threshold
+                if (lastZoom === null || Math.abs((currentZoom - lastZoom) / lastZoom) > 0.25) {
+                    lastZoomLevelRef.current = currentZoom;
+
+                    const center = map.getCenter();
+                    const bounds = map.getBounds();
+                    const radius = map.distance(bounds.getSouthWest(), bounds.getNorthEast()) / 2;
+
+                    // Fetch new data from the backend
+                    fetchNearbyLocations(center.lat, center.lng, radius).then((data) => {
+                        const newCoordinates = data.map(item => ({
+                            lat: item.location.lat,
+                            lng: item.location.lon,
+                            imgSrc: item.url,
+                            name: item.slug,
+                        }));
+                        setCoordinates(newCoordinates);
+                    });
+                }
+            },
+        });
+
+        return null;
+    };
+
     return (
         <div className="map-wrapper">
             {/* Map Display */}
-            <MapContainer center={position} zoom={2} scrollWheelZoom={true} className="leaflet-map" minZoom={2}
-            maxBounds={bounds} // Restrict user from panning out of bounds
-            maxBoundsViscosity={1.0} // Adjust the "stickiness" when hitting the bounds
+            <MapContainer
+                center={position}
+                zoom={2}
+                scrollWheelZoom={true}
+                className="leaflet-map"
+                minZoom={2}
+                maxBounds={bounds} // Restrict user from panning out of bounds
+                maxBoundsViscosity={1.0} // Adjust the "stickiness" when hitting the bounds
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -65,6 +108,7 @@ const Map = () => {
                         }}
                     />
                 ))}
+                <MapEventsHandler />
             </MapContainer>
 
             {/* Modal */}
