@@ -8,14 +8,23 @@ const express = require("express");
 const logout = require("./logout");
 const shop = require("./shop");
 const path = require("path");
+const query = require("../db/access/query");
+const crypto = require("crypto");
 
-function isLogged(req, res, next) {
+async function isLogged(req, res, next) {
     console.log(req.cookies);
     if (!req.session.user) {
-        res.sendStatus(403);
-        return;
+        const ssid = crypto.randomBytes(16).toString("hex");
+        const {insertId} = await query({name: "create_user_main", params: [ssid]});
+        req.session.user = {
+            slug: ssid,
+            id: insertId
+        };
+        next();
     }
-    next();
+    else {
+        next();
+    }
 }
 
 

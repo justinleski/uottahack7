@@ -26,7 +26,7 @@ app.use(session({
     proxy: true,
     cookie: {
         secure: false,
-        maxAge: Number(process.env.SERVER_INACTIVITY_TIMEOUT),
+        maxAge: Number(process.env.SERVER_INACTIVITY_TIMEOUT)*10,
         sameSite: 'Lax',
         httpOnly: true,
         path: "/"
